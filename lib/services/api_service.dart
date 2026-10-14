@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_app/models/movie.dart';
 import 'package:test_app/models/movie_detail.dart';
@@ -8,8 +9,7 @@ import 'package:test_app/models/tv_show_detail.dart';
 
 class ApiService {
   final String _baseUrl = "https://api.themoviedb.org/3/";
-  final String _bearerToken =
-      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZWU2MTAyMDBiOGVjZWEwOGU0NDNmZmYyNzA4MjBjOSIsIm5iZiI6MTY4OTg0ODM5Mi45MjUsInN1YiI6IjY0YjkwYTQ4MzAwOWFhMDBmZmJlZjcyZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.i4RyA4hSaYk_fHkoDqQ_GgOWVWt82eFeszDByhVNo_k";
+  final String _bearerToken = dotenv.env['BEARER_TOKEN'] ?? '';
   static final String imgBaseUrl = "https://image.tmdb.org/t/p/w500/";
   static final String seasonPosterPath =
       "https://media.themoviedb.org/t/p/w260_and_h390_face/";

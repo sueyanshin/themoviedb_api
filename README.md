@@ -1,4 +1,4 @@
-# test_app
+# TheMovieDB API APP
 
 A new Flutter project.
 
