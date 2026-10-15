@@ -70,7 +70,7 @@ class ApiService {
     }
   }
 
-  Future<TvShowDetail> fetchTvShowDetail(int? id) async {
+  Future<TvShowDetail> fetchTvShowDetail(int id) async {
     var url = Uri.parse("${_baseUrl}tv/$id");
     var response = await http.get(
       url,
