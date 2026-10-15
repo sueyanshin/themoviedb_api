@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:test_app/presentation/providers/movie_provider.dart';
-import 'package:test_app/presentation/providers/tv_shows_provider.dart';
+import 'package:test_app/models/movie.dart';
+import 'package:test_app/models/tv_show.dart';
 import 'package:test_app/presentation/widgets/movie_card.dart';
 import 'package:test_app/presentation/widgets/tv_show_card.dart';
+import 'package:test_app/services/api_service.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const new({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Future<List<Movie>> _movieList;
+  late Future<List<TvShow>> _tvShowList;
+
+  @override
+  void initState() {
+    super.initState();
+    final apiService = context.read<ApiService>();
+    _movieList = apiService.fetchPopularMovies();
+    _tvShowList = apiService.fetchPopularSeries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,62 +38,57 @@ class HomePage extends StatelessWidget {
           children: [
             Text('Popular Movies', style: theme.textTheme.titleMedium),
             SizedBox(height: 20),
-            Consumer<MovieProvider>(
-              builder: (context, movieProvider, child) {
-                if (movieProvider.isPopularMovieLoading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (movieProvider.popularMovies.isEmpty) {
-                  return Center(child: Text('Movies not found'));
-                }
-
-                if (movieProvider.popularMoviesErrorMessage.isNotEmpty) {
-                  return Text(
-                    movieProvider.popularMoviesErrorMessage.toString(),
+            FutureBuilder<List<Movie>>(
+              future: _movieList,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("${snapshot.error} occurred"));
+                } else if (snapshot.hasData) {
+                  return SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final movie = snapshot.data![index];
+                        return MovieCard(movie: movie);
+                      },
+                    ),
                   );
+                } else {
+                  return const Center(child: Text("No movie available."));
                 }
-
-                return SizedBox(
-                  height: 200,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: movieProvider.popularMovies.length,
-                    itemBuilder: (context, index) {
-                      final movie = movieProvider.popularMovies[index];
-                      return MovieCard(movie: movie);
-                    },
-                  ),
-                );
               },
             ),
             const SizedBox(height: 20),
 
             Text('Popular TV Shows', style: theme.textTheme.titleMedium),
             SizedBox(height: 20),
-            Consumer<TvShowsProvider>(
-              builder: (context, tvShowsProvider, child) {
-                if (tvShowsProvider.isTvShowsLoading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (tvShowsProvider.tvShows.isEmpty) {
-                  return Center(child: Text('TV shows not found'));
-                }
 
-                if (tvShowsProvider.tvShowsErrorMessage.isNotEmpty) {
-                  return Text(tvShowsProvider.tvShowsErrorMessage.toString());
+            FutureBuilder(
+              future: _tvShowList,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("${snapshot.error} occurred"));
+                } else if (snapshot.hasData) {
+                  return SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final tvShow = snapshot.data![index];
+                        return TvShowCard(tvShow: tvShow);
+                      },
+                    ),
+                  );
+                } else {
+                  return const Center(child: Text("No TV shows available"));
                 }
-
-                return SizedBox(
-                  height: 200,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: tvShowsProvider.tvShows.length,
-                    itemBuilder: (context, index) {
-                      final tvShow = tvShowsProvider.tvShows[index];
-                      return TvShowCard(tvShow: tvShow);
-                    },
-                  ),
-                );
               },
             ),
           ],
