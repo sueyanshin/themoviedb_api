@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:test_app/config/theme/app_theme.dart';
 import 'package:test_app/presentation/pages/home_page.dart';
 import 'package:test_app/presentation/providers/movie_provider.dart';
 import 'package:test_app/presentation/providers/tv_shows_provider.dart';
@@ -11,7 +12,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<MovieProvider>(create: (_) => MovieProvider()),
+        ChangeNotifierProvider<MovieProvider>(
+          create: (_) => MovieProvider()..fetchPopularMovies(),
+        ),
         ChangeNotifierProvider<TvShowsProvider>(
           create: (_) => TvShowsProvider(),
         ),
@@ -29,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movie App',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: AppTheme.darkTheme,
       home: HomePage(),
     );
   }

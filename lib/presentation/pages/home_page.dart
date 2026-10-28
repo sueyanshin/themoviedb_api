@@ -12,22 +12,34 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text("Movie App")),
+      appBar: AppBar(centerTitle: true, title: Text("Movie App")),
 
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: .start,
           children: [
-            Text('Popular Movies', style: theme.textTheme.titleMedium),
+            Text(
+              'Popular Movies',
+              style: theme.textTheme.titleMedium!.copyWith(fontWeight: .w600),
+            ),
             SizedBox(height: 20),
             Consumer<MovieProvider>(
               builder: (context, movieProvider, child) {
                 if (movieProvider.isPopularMovieLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Container(
+                    height: 200,
+                    alignment: .center,
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 if (movieProvider.popularMovies.isEmpty) {
-                  return Center(child: Text('Movies not found'));
+                  return Container(
+                    height: 200,
+                    alignment: .center,
+
+                    child: Text('Movies not found'),
+                  );
                 }
 
                 if (movieProvider.popularMoviesErrorMessage.isNotEmpty) {
@@ -51,15 +63,26 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            Text('Popular TV Shows', style: theme.textTheme.titleMedium),
+            Text(
+              'Popular TV Shows',
+              style: theme.textTheme.titleMedium!.copyWith(fontWeight: .w600),
+            ),
             SizedBox(height: 20),
             Consumer<TvShowsProvider>(
               builder: (context, tvShowsProvider, child) {
                 if (tvShowsProvider.isTvShowsLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Container(
+                    height: 200,
+                    alignment: .center,
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 if (tvShowsProvider.tvShows.isEmpty) {
-                  return Center(child: Text('TV shows not found'));
+                  return Container(
+                    height: 200,
+                    alignment: .center,
+                    child: Text('TV shows not found'),
+                  );
                 }
 
                 if (tvShowsProvider.tvShowsErrorMessage.isNotEmpty) {

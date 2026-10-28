@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/presentation/providers/movie_provider.dart';
+import 'package:test_app/presentation/widgets/cast_card.dart';
 import 'package:test_app/presentation/widgets/genre_item.dart';
 import 'package:test_app/presentation/widgets/icon_with_label.dart';
 import 'package:test_app/presentation/widgets/image_banner.dart';
@@ -46,7 +47,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   backdropPath: movie.backdropPath.toString(),
                 ),
                 const SizedBox(height: 20),
-                Text(movie.title.toString(), style: theme.textTheme.titleLarge),
+                Text(
+                  movie.title.toString(),
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontWeight: .w600,
+                  ),
+                ),
                 const SizedBox(height: 10),
 
                 if (movie.genres != null)
@@ -79,6 +85,27 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   movie.overview.toString(),
                   style: theme.textTheme.bodyMedium,
                 ),
+                const SizedBox(height: 20),
+                Text(
+                  'Top Billed Cast',
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontWeight: .w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                if (movie.casts != null && movie.casts!.isNotEmpty)
+                  SizedBox(
+                    height: 220,
+                    child: ListView.builder(
+                      scrollDirection: .horizontal,
+                      itemCount: movie.casts!.length,
+                      itemBuilder: (context, index) {
+                        final cast = movie.casts![index];
+                        return CastCard(cast: cast);
+                      },
+                    ),
+                  ),
+                const SizedBox(height: 20),
               ],
             ),
           );

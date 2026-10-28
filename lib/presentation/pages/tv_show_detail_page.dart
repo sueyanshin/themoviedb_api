@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/presentation/providers/tv_shows_provider.dart';
+import 'package:test_app/presentation/widgets/cast_card.dart';
 import 'package:test_app/presentation/widgets/genre_item.dart';
 import 'package:test_app/presentation/widgets/image_banner.dart';
 import 'package:test_app/presentation/widgets/season_card.dart';
@@ -48,7 +49,9 @@ class _TvShowDetailPageState extends State<TvShowDetailPage> {
                 const SizedBox(height: 20),
                 Text(
                   tvShowDetail.name.toString(),
-                  style: theme.textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontWeight: .w600,
+                  ),
                 ),
                 const SizedBox(height: 10),
 
@@ -67,7 +70,8 @@ class _TvShowDetailPageState extends State<TvShowDetailPage> {
 
                 const SizedBox(height: 10),
 
-                if (tvShowDetail.createdBy != null) ...[
+                if (tvShowDetail.createdBy != null &&
+                    tvShowDetail.createdBy!.isNotEmpty) ...[
                   Text("Created by", style: theme.textTheme.labelMedium),
                   Wrap(
                     direction: .vertical,
@@ -82,7 +86,38 @@ class _TvShowDetailPageState extends State<TvShowDetailPage> {
 
                 const SizedBox(height: 20),
 
-                Text("Seasons", style: theme.textTheme.titleMedium),
+                if (tvShowDetail.casts != null &&
+                    tvShowDetail.casts!.isNotEmpty) ...[
+                  Text(
+                    "Series Cast",
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: .w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  if (tvShowDetail.casts != null &&
+                      tvShowDetail.casts!.isNotEmpty)
+                    SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: .horizontal,
+                        itemCount: tvShowDetail.casts!.length,
+                        itemBuilder: (context, index) {
+                          final cast = tvShowDetail.casts![index];
+                          return CastCard(cast: cast);
+                        },
+                      ),
+                    ),
+
+                  const SizedBox(height: 20),
+                ],
+
+                Text(
+                  "Seasons",
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    fontWeight: .w600,
+                  ),
+                ),
 
                 const SizedBox(height: 20),
 

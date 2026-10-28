@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:test_app/models/cast_detail.dart';
 import 'package:test_app/models/movie.dart';
 import 'package:test_app/models/movie_detail.dart';
 import 'package:test_app/models/tv_show.dart';
@@ -34,7 +35,7 @@ class ApiService {
   }
 
   Future<MovieDetail> fetchMovieDetail(int id) async {
-    var url = Uri.parse("${_baseUrl}movie/$id");
+    var url = Uri.parse("${_baseUrl}movie/$id?append_to_response=credits");
     var response = await http.get(
       url,
       headers: {
@@ -71,7 +72,7 @@ class ApiService {
   }
 
   Future<TvShowDetail> fetchTvShowDetail(int id) async {
-    var url = Uri.parse("${_baseUrl}tv/$id");
+    var url = Uri.parse("${_baseUrl}tv/$id?append_to_response=credits");
     var response = await http.get(
       url,
       headers: {
@@ -85,6 +86,26 @@ class ApiService {
       return TvShowDetail.fromJson(responseJson);
     } else {
       throw Exception("Failed to load tv show detail.");
+    }
+  }
+
+  Future<CastDetail> fetchCastDetail(int id) async {
+    var url = Uri.parse(
+      "${_baseUrl}person/$id?append_to_response=combined_credits",
+    );
+    var response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': "Bearer $_bearerToken",
+      },
+    );
+    final responseJson = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return CastDetail.fromJson(responseJson);
+    } else {
+      throw Exception('Failed to load cast details');
     }
   }
 }

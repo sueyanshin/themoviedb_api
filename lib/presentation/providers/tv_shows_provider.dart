@@ -12,6 +12,10 @@ class TvShowsProvider extends ChangeNotifier {
   bool _isDetailLoading = false;
   String _detailErrorMessage = "";
 
+  // List<Cast> _tvShowDetail = TvShowDetail();
+  // bool _isDetailLoading = false;
+  // String _detailErrorMessage = "";
+
   final ApiService _apiService = ApiService();
 
   bool get isTvShowsLoading => _isTvShowsLoading;

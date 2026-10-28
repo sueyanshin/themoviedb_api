@@ -1,0 +1,109 @@
+import 'package:test_app/config/helpers/date_formatter.dart';
+
+class CastMediaCredit {
+  bool? adult;
+  String? backdropPath;
+  List<int>? genreIds;
+  int? id;
+  List<String>? originCountry;
+  String? originalLanguage;
+  String? originalName;
+  String? overview;
+  double? popularity;
+  String? posterPath;
+  String? firstAirDate;
+  bool? softcore;
+  String? name;
+  double? voteAverage;
+  int? voteCount;
+  String? character;
+  String? creditId;
+  int? episodeCount;
+  String? firstCreditAirDate;
+  String? mediaType;
+  String? title;
+  String? releaseDate;
+
+  CastMediaCredit({
+    this.adult,
+    this.backdropPath,
+    this.genreIds,
+    this.id,
+    this.originCountry,
+    this.originalLanguage,
+    this.originalName,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.firstAirDate,
+    this.softcore,
+    this.name,
+    this.voteAverage,
+    this.voteCount,
+    this.character,
+    this.creditId,
+    this.episodeCount,
+    this.firstCreditAirDate,
+    this.mediaType,
+    this.title,
+    this.releaseDate,
+  });
+
+  CastMediaCredit.fromJson(Map<String, dynamic> json) {
+    adult = json['adult'];
+    backdropPath = json['backdrop_path'];
+    genreIds = json['genre_ids'].cast<int>();
+    id = json['id'];
+    originCountry = json['origin_country']?.cast<String>();
+    originalLanguage = json['original_language'];
+    originalName = json['original_name'];
+    overview = json['overview'];
+    popularity = json['popularity'];
+    posterPath = json['poster_path'];
+    firstAirDate = json['first_air_date'] != null
+        ? DateFormatter.formatString(json['first_air_date'])
+        : "";
+    softcore = json['softcore'];
+    name = json['name'];
+    voteAverage = json['vote_average'];
+    voteCount = json['vote_count'];
+    character = json['character'];
+    creditId = json['credit_id'];
+    episodeCount = json['episode_count'];
+    firstCreditAirDate = json['first_credit_air_date'] != null
+        ? DateFormatter.formatString(json['first_credit_air_date'])
+        : "";
+    mediaType = json['media_type'] ?? 'movie';
+    title = json['title'] ?? '';
+    releaseDate = json['release_date'] != null
+        ? DateFormatter.formatString(json['release_date'])
+        : "";
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['adult'] = adult;
+    data['backdrop_path'] = backdropPath;
+    data['genre_ids'] = genreIds;
+    data['id'] = id;
+    data['origin_country'] = originCountry;
+    data['original_language'] = originalLanguage;
+    data['original_name'] = originalName;
+    data['overview'] = overview;
+    data['popularity'] = popularity;
+    data['poster_path'] = posterPath;
+    data['first_air_date'] = firstAirDate;
+    data['softcore'] = softcore;
+    data['name'] = name;
+    data['vote_average'] = voteAverage;
+    data['vote_count'] = voteCount;
+    data['character'] = character;
+    data['credit_id'] = creditId;
+    data['episode_count'] = episodeCount;
+    data['first_credit_air_date'] = firstCreditAirDate;
+    data['media_type'] = mediaType;
+    data['title'] = title;
+    data['release_date'] = releaseDate;
+    return data;
+  }
+}

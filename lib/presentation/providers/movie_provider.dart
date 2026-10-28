@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/models/cast_detail.dart';
 import 'package:test_app/models/movie.dart';
 import 'package:test_app/models/movie_detail.dart';
 import 'package:test_app/services/api_service.dart';
@@ -12,6 +13,12 @@ class MovieProvider extends ChangeNotifier {
   bool _isMovieDetailLoading = false;
   String _movieDetailErrorMessage = "";
 
+  CastDetail _castDetail = CastDetail();
+  bool _isCastDetailLoading = false;
+  String _castDetailErrorMessage = "";
+
+  bool _isTextExpanded = false;
+
   final ApiService _apiService = ApiService();
 
   bool get isPopularMovieLoading => _isPopularMovieLoading;
@@ -22,9 +29,11 @@ class MovieProvider extends ChangeNotifier {
   bool get isMovieDetailLoading => _isMovieDetailLoading;
   String get movieDetailErrorMessage => _movieDetailErrorMessage;
 
-  MovieProvider() {
-    fetchPopularMovies();
-  }
+  CastDetail get castDetail => _castDetail;
+  bool get isCastDetailLoading => _isCastDetailLoading;
+  String get castDetailErrorMessage => _castDetailErrorMessage;
+
+  bool get isTextExpanded => _isTextExpanded;
 
   Future<void> fetchPopularMovies() async {
     try {
@@ -52,5 +61,24 @@ class MovieProvider extends ChangeNotifier {
       _isMovieDetailLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> fetchCastDetail(int id) async {
+    try {
+      _isCastDetailLoading = true;
+      _castDetailErrorMessage = "";
+      notifyListeners();
+      _castDetail = await _apiService.fetchCastDetail(id);
+    } catch (e) {
+      _castDetailErrorMessage = e.toString();
+    } finally {
+      _isCastDetailLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void updateExpanded(bool value) {
+    _isTextExpanded = value;
+    notifyListeners();
   }
 }

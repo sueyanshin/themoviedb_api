@@ -1,3 +1,6 @@
+import 'package:test_app/config/helpers/date_formatter.dart';
+import 'package:test_app/models/cast.dart';
+
 class TvShowDetail {
   bool? adult;
   String? backdropPath;
@@ -30,6 +33,7 @@ class TvShowDetail {
   String? type;
   double? voteAverage;
   int? voteCount;
+  List<Cast>? casts;
 
   TvShowDetail({
     this.adult,
@@ -63,6 +67,7 @@ class TvShowDetail {
     this.type,
     this.voteAverage,
     this.voteCount,
+    this.casts,
   });
 
   TvShowDetail.fromJson(Map<String, dynamic> json) {
@@ -75,7 +80,9 @@ class TvShowDetail {
       });
     }
 
-    firstAirDate = json['first_air_date'];
+    firstAirDate = json['first_air_date'] != null
+        ? DateFormatter.formatString(json['first_air_date'])
+        : "";
     if (json['genres'] != null) {
       genres = <Genres>[];
       json['genres'].forEach((v) {
@@ -86,7 +93,9 @@ class TvShowDetail {
     id = json['id'];
     inProduction = json['in_production'];
     languages = json['languages'].cast<String>();
-    lastAirDate = json['last_air_date'];
+    lastAirDate = json['last_air_date'] != null
+        ? DateFormatter.formatString(json['last_air_date'])
+        : "";
     lastEpisodeToAir = json['last_episode_to_air'] != null
         ? LastEpisodeToAir.fromJson(json['last_episode_to_air'])
         : null;
@@ -132,6 +141,11 @@ class TvShowDetail {
     type = json['type'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
+    casts = json['credits'] != null && json['credits']['cast'] != null
+        ? (json['credits']['cast'] as List)
+              .map((item) => Cast.fromJson(item))
+              .toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -188,6 +202,7 @@ class TvShowDetail {
     data['type'] = type;
     data['vote_average'] = voteAverage;
     data['vote_count'] = voteCount;
+    data['credits']['cast'] = casts;
     return data;
   }
 }
@@ -280,7 +295,9 @@ class LastEpisodeToAir {
     overview = json['overview'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
-    airDate = json['air_date'];
+    airDate = json['air_date'] != null
+        ? DateFormatter.formatString(json['air_date'])
+        : "";
     episodeNumber = json['episode_number'];
     episodeType = json['episode_type'];
     productionCode = json['production_code'];
@@ -373,7 +390,9 @@ class Seasons {
   });
 
   Seasons.fromJson(Map<String, dynamic> json) {
-    airDate = json['air_date'];
+    airDate = json['air_date'] != null
+        ? DateFormatter.formatString(json['air_date'])
+        : "";
     episodeCount = json['episode_count'];
     id = json['id'];
     name = json['name'];

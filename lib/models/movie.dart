@@ -1,3 +1,5 @@
+import 'package:test_app/config/helpers/date_formatter.dart';
+
 class Movie {
   bool? adult;
   String? backdropPath;
@@ -44,7 +46,9 @@ class Movie {
     overview = json['overview'];
     popularity = json['popularity'];
     posterPath = json['poster_path'];
-    releaseDate = json['release_date'];
+    releaseDate = json['release_date'] != null
+        ? DateFormatter.formatString(json['release_date'])
+        : "";
     softcore = json['softcore'];
     video = json['video'];
     voteAverage = json['vote_average'];

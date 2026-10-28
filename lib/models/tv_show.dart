@@ -1,3 +1,5 @@
+import 'package:test_app/config/helpers/date_formatter.dart';
+
 class TvShow {
   bool? adult;
   String? backdropPath;
@@ -44,7 +46,9 @@ class TvShow {
     overview = json['overview'];
     popularity = json['popularity'];
     posterPath = json['poster_path'];
-    firstAirDate = json['first_air_date'];
+    firstAirDate = json['first_air_date'] != null
+        ? DateFormatter.formatString(json['first_air_date'])
+        : "";
     softcore = json['softcore'];
     name = json['name'];
     voteAverage = json['vote_average'];

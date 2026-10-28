@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/presentation/widgets/loading_container.dart';
 import 'package:test_app/services/api_service.dart';
 
 class ImageBanner extends StatelessWidget {
@@ -14,24 +15,22 @@ class ImageBanner extends StatelessWidget {
   final double height;
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      ApiService.imgBaseUrl + backdropPath,
-      width: width,
-      height: height,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          height: 200,
-          alignment: .center,
-          color: Colors.grey[200],
-          child: Icon(Icons.broken_image, size: 40),
-        );
-      },
+    return ClipRRect(
+      borderRadius: .circular(20),
+      child: Image.network(
+        ApiService.imgBaseUrl + backdropPath,
+        width: width,
+        height: height,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
+          return LoadingContainer();
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return ImageErrorContainer(height: 200);
+        },
+      ),
     );
   }
 }

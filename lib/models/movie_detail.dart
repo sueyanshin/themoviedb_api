@@ -1,3 +1,6 @@
+import 'package:test_app/config/helpers/date_formatter.dart';
+import 'package:test_app/models/cast.dart';
+
 class MovieDetail {
   bool? adult;
   String? backdropPath;
@@ -25,6 +28,7 @@ class MovieDetail {
   bool? video;
   double? voteAverage;
   int? voteCount;
+  List<Cast>? casts;
 
   MovieDetail({
     this.adult,
@@ -53,6 +57,7 @@ class MovieDetail {
     this.video,
     this.voteAverage,
     this.voteCount,
+    this.casts,
   });
 
   MovieDetail.fromJson(Map<String, dynamic> json) {
@@ -86,7 +91,9 @@ class MovieDetail {
         productionCountries!.add(ProductionCountries.fromJson(v));
       });
     }
-    releaseDate = json['release_date'];
+    releaseDate = json['release_date'] != null
+        ? DateFormatter.formatString(json['release_date'])
+        : "";
     revenue = json['revenue'];
     runtime = json['runtime'];
     softcore = json['softcore'];
@@ -102,6 +109,11 @@ class MovieDetail {
     video = json['video'];
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
+    casts = json['credits'] != null && json['credits']['cast'] != null
+        ? (json['credits']['cast'] as List)
+              .map((item) => Cast.fromJson(item))
+              .toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +158,7 @@ class MovieDetail {
     data['video'] = video;
     data['vote_average'] = voteAverage;
     data['vote_count'] = voteCount;
+    data['credits']['cast'] = casts;
     return data;
   }
 }
